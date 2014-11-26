@@ -103,11 +103,9 @@ function replace (data, done) {
 }
 function del (done) {
 	return request
-		.delete(this.url())
+		.del(this.url())
 		.set('Authorization', this.token())
 		.set('Accept', 'application/json')
-		.set('Content-Type', 'application/json')
-		.send(data)
 		.end(function (err, res) {
 			done && done(err, res.body, res)
 		})
