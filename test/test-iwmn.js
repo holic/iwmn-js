@@ -379,9 +379,19 @@ describe('IWMN Client', function () {
 		})
 		it('can get account details', function (done) {
 			expect(iwmn.account.get).to.be.a('function')
+
+			mitm.on('request', expectRequest('GET', '/account'))
+			iwmn.account.get(function () {
+				done()
+			})
 		})
 		it('can update account details', function (done) {
 			expect(iwmn.account.update).to.be.a('function')
+
+			mitm.on('request', expectRequest('PATCH', '/account', '{"username":"john@example.com"}'))
+			iwmn.account.update({ username: 'john@example.com' }, function () {
+				done()
+			})
 		})
 
 		describe('Default Contact', function () {
@@ -390,12 +400,27 @@ describe('IWMN Client', function () {
 			})
 			it('can get default contact details', function (done) {
 				expect(iwmn.account.default_contact.get).to.be.a('function')
+
+				mitm.on('request', expectRequest('GET', '/account/default_contact'))
+				iwmn.account.default_contact.get(function () {
+					done()
+				})
 			})
 			it('can update default contact details', function (done) {
 				expect(iwmn.account.default_contact.update).to.be.a('function')
+
+				mitm.on('request', expectRequest('PATCH', '/account/default_contact', '{"first_name":"John"}'))
+				iwmn.account.default_contact.update({ first_name: 'John' }, function () {
+					done()
+				})
 			})
 			it('can replace default contact details', function (done) {
 				expect(iwmn.account.default_contact.replace).to.be.a('function')
+
+				mitm.on('request', expectRequest('PUT', '/account/default_contact', '{"first_name":"John"}'))
+				iwmn.account.default_contact.replace({ first_name: 'John' }, function () {
+					done()
+				})
 			})
 		})
 
@@ -405,9 +430,19 @@ describe('IWMN Client', function () {
 			})
 			it('can list default nameservers', function (done) {
 				expect(iwmn.account.default_nameservers.list).to.be.a('function')
+
+				mitm.on('request', expectRequest('GET', '/account/default_nameservers'))
+				iwmn.account.default_nameservers.list(function () {
+					done()
+				})
 			})
 			it('can replace default nameservers', function (done) {
 				expect(iwmn.account.default_nameservers.replace).to.be.a('function')
+
+				mitm.on('request', expectRequest('PUT', '/account/default_nameservers', '["ns1.dnsimple.com","ns2.dnsimple.com"]'))
+				iwmn.account.default_nameservers.replace(['ns1.dnsimple.com', 'ns2.dnsimple.com'], function () {
+					done()
+				})
 			})
 		})
 
@@ -417,9 +452,19 @@ describe('IWMN Client', function () {
 			})
 			it('can list billing profiles', function (done) {
 				expect(iwmn.account.billing.list).to.be.a('function')
+
+				mitm.on('request', expectRequest('GET', '/account/billing'))
+				iwmn.account.billing.list(function () {
+					done()
+				})
 			})
 			it('can create billing profiles', function (done) {
 				expect(iwmn.account.billing.create).to.be.a('function')
+
+				mitm.on('request', expectRequest('POST', '/account/billing', '{"number":"4444111144441111"}'))
+				iwmn.account.billing.create({ number: "4444111144441111" }, function () {
+					done()
+				})
 			})
 
 			describe('Profile', function () {
@@ -431,6 +476,11 @@ describe('IWMN Client', function () {
 				})
 				it('can delete a billing profile', function (done) {
 					expect(iwmn.account.billing(1).del).to.be.a('function')
+
+					mitm.on('request', expectRequest('DELETE', '/account/billing/1'))
+					iwmn.account.billing(1).del(function () {
+						done()
+					})
 				})
 			})
 		})
@@ -441,6 +491,11 @@ describe('IWMN Client', function () {
 			})
 			it('can list receipts', function (done) {
 				expect(iwmn.account.receipts.list).to.be.a('function')
+
+				mitm.on('request', expectRequest('GET', '/account/receipts'))
+				iwmn.account.receipts.list(function () {
+					done()
+				})
 			})
 
 			describe('Receipt', function () {
@@ -452,6 +507,11 @@ describe('IWMN Client', function () {
 				})
 				it('can get a receipt', function (done) {
 					expect(iwmn.account.receipts(1).get).to.be.a('function')
+
+					mitm.on('request', expectRequest('GET', '/account/receipts/1'))
+					iwmn.account.receipts(1).get(function () {
+						done()
+					})
 				})
 			})
 		})
@@ -463,6 +523,11 @@ describe('IWMN Client', function () {
 		})
 		it('can list products', function (done) {
 			expect(iwmn.products.list).to.be.a('function')
+
+			mitm.on('request', expectRequest('GET', '/products'))
+			iwmn.products.list(function () {
+				done()
+			})
 		})
 
 		describe('Product', function () {
@@ -474,6 +539,11 @@ describe('IWMN Client', function () {
 			})
 			it('can get a product', function (done) {
 				expect(iwmn.products('com').get).to.be.a('function')
+
+				mitm.on('request', expectRequest('GET', '/products/com'))
+				iwmn.products('com').get(function () {
+					done()
+				})
 			})
 		})
 	})
@@ -484,6 +554,11 @@ describe('IWMN Client', function () {
 		})
 		it('can list TLDs', function (done) {
 			expect(iwmn.tlds.list).to.be.a('function')
+
+			mitm.on('request', expectRequest('GET', '/tlds'))
+			iwmn.tlds.list(function () {
+				done()
+			})
 		})
 
 		describe('TLD', function () {
@@ -495,6 +570,11 @@ describe('IWMN Client', function () {
 			})
 			it('can get a TLD', function (done) {
 				expect(iwmn.tlds('com').get).to.be.a('function')
+
+				mitm.on('request', expectRequest('GET', '/tlds/com'))
+				iwmn.tlds('com').get(function () {
+					done()
+				})
 			})
 		})
 	})
@@ -505,6 +585,11 @@ describe('IWMN Client', function () {
 		})
 		it('can list search results', function (done) {
 			expect(iwmn.searchResults.list).to.be.a('function')
+
+			mitm.on('request', expectRequest('GET', '/search/results'))
+			iwmn.searchResults.list(function () {
+				done()
+			})
 		})
 
 		describe('Result', function () {
@@ -516,6 +601,11 @@ describe('IWMN Client', function () {
 			})
 			it('can get a search result', function (done) {
 				expect(iwmn.searchResults('example.com').get).to.be.a('function')
+
+				mitm.on('request', expectRequest('GET', '/search/results/example.com'))
+				iwmn.searchResults('example.com').get(function () {
+					done()
+				})
 			})
 		})
 	})
