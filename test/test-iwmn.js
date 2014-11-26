@@ -55,10 +55,12 @@ describe('IWMN Client', function () {
 				expect(req.headers.host).to.be('api.iwantmyname.com')
 				expect(req.headers.accept).to.be('application/json')
 				expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
-				done()
+				res.end()
 			})
 
-			iwmn.domains('example.com').get()
+			iwmn.domains('example.com').get(function () {
+				done()
+			})
 		})
 		it('can update a domain', function (done) {
 			expect(iwmn.domains('example.com').update).to.be.a('function')
@@ -69,10 +71,17 @@ describe('IWMN Client', function () {
 				expect(req.headers.host).to.be('api.iwantmyname.com')
 				expect(req.headers.accept).to.be('application/json')
 				expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
-				done()
+				expect(req.headers['content-type']).to.be('application/json')
+				req.setEncoding('utf8')
+				req.on('data', function (data) {
+					expect(data).to.be('{"auto_renew":false}')
+					res.end()
+				})
 			})
 
-			iwmn.domains('example.com').update()
+			iwmn.domains('example.com').update({ auto_renew: false }, function () {
+				done()
+			})
 		})
 
 		describe('Nameservers', function () {
