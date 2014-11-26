@@ -271,37 +271,40 @@ describe('IWMN Client', function () {
 			})
 
 			describe('Apps', function () {
-				var apps = iwmn.domains('example.com').apps
-
 				it('has an apps endpoint', function () {
-					expect(apps).to.be.ok()
-					expect(apps.path).to.be.a('function')
-					expect(apps.path()).to.be('/domains/example.com/apps')
-					expect(apps.url).to.be.a('function')
-					expect(apps.url()).to.be('https://api.iwantmyname.com/domains/example.com/apps')
+					expect(iwmn.domains('example.com').apps).to.be.ok()
 				})
-				it('can list apps', function () {
-					expect(apps.list).to.be.a('function')
+				it('can list apps', function (done) {
+					expect(iwmn.domains('example.com').apps.list).to.be.a('function')
+
+					mitm.on('request', expectRequest('GET', '/domains/example.com/apps'))
+					iwmn.domains('example.com').apps.list(function () {
+						done()
+					})
 				})
-				it('can create apps', function () {
-					expect(apps.create).to.be.a('function')
-				})
-				it('is an app endpoint constructor', function () {
-					expect(apps).to.be.a('function')
+				it('can create apps', function (done) {
+					expect(iwmn.domains('example.com').apps.create).to.be.a('function')
+
+					mitm.on('request', expectRequest('POST', '/domains/example.com/apps', '{"app":"Tumblr"}'))
+					iwmn.domains('example.com').apps.create({ app: 'Tumblr' }, function () {
+						done()
+					})
 				})
 
 				describe('App', function () {
-					var app = apps(1)
-
-					it('can create an app endpoint', function () {
-						expect(app).to.be.ok()
-						expect(app.path).to.be.a('function')
-						expect(app.path()).to.be('/domains/example.com/apps/1')
-						expect(app.url).to.be.a('function')
-						expect(app.url()).to.be('https://api.iwantmyname.com/domains/example.com/apps/1')
+					it('has an app endpoint constructor', function () {
+						expect(iwmn.domains('example.com').apps).to.be.a('function')
 					})
-					it('can delete an app', function () {
-						expect(app.del).to.be.a('function')
+					it('can create an app endpoint', function () {
+						expect(iwmn.domains('example.com').apps(1)).to.be.ok()
+					})
+					it('can delete an app', function (done) {
+						expect(iwmn.domains('example.com').apps(1).del).to.be.a('function')
+
+						mitm.on('request', expectRequest('DELETE', '/domains/example.com/apps/1'))
+						iwmn.domains('example.com').apps(1).del(function () {
+							done()
+						})
 					})
 				})
 			})
