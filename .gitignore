@@ -1,0 +1,7 @@
+.DS_Store
+
+node_modules/
+npm-debug.log
+
+# ignore dist files until we're ready to release
+dist/
