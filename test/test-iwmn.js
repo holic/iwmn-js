@@ -343,17 +343,33 @@ describe('IWMN Client', function () {
 	})
 
 	describe('Apps & Services', function () {
-		var apps = iwmn.apps
-
 		it('has an apps endpoint', function () {
-			expect(apps).to.be.ok()
-			expect(apps.path).to.be.a('function')
-			expect(apps.path()).to.be('/apps')
-			expect(apps.url).to.be.a('function')
-			expect(apps.url()).to.be('https://api.iwantmyname.com/apps')
+			expect(iwmn.apps).to.be.ok()
 		})
-		it('can list apps', function () {
-			expect(apps.list).to.be.a('function')
+		it('can list apps', function (done) {
+			expect(iwmn.apps.list).to.be.a('function')
+
+			mitm.on('request', expectRequest('GET', '/apps'))
+			iwmn.apps.list(function () {
+				done()
+			})
+		})
+
+		describe('App', function () {
+			it('has an app endpoint constructor', function () {
+				expect(iwmn.apps).to.be.a('function')
+			})
+			it('has an app endpoint', function () {
+				expect(iwmn.apps('tumblr')).to.be.ok()
+			})
+			it('can get an app', function (done) {
+				expect(iwmn.apps('tumblr').get).to.be.a('function')
+
+				mitm.on('request', expectRequest('GET', '/apps/tumblr'))
+				iwmn.apps('tumblr').get(function () {
+					done()
+				})
+			})
 		})
 	})
 
