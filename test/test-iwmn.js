@@ -55,200 +55,200 @@ describe('IWMN Client', function () {
 				done()
 			})
 		})
-	})
 
-	describe('Domain', function () {
-		it('has a domain endpoint constructor', function () {
-			expect(iwmn.domains).to.be.a('function')
-		})
-		it('can create a domain endpoint', function () {
-			expect(iwmn.domains('example.com')).to.be.ok()
-		})
-		it('can get a domain', function (done) {
-			expect(iwmn.domains('example.com').get).to.be.a('function')
+		describe('Domain', function () {
+			it('has a domain endpoint constructor', function () {
+				expect(iwmn.domains).to.be.a('function')
+			})
+			it('can create a domain endpoint', function () {
+				expect(iwmn.domains('example.com')).to.be.ok()
+			})
+			it('can get a domain', function (done) {
+				expect(iwmn.domains('example.com').get).to.be.a('function')
 
-			mitm.on('request', expectRequest('GET', '/domains/example.com'))
-			iwmn.domains('example.com').get(function () {
-				done()
-			})
-		})
-		it('can update a domain', function (done) {
-			expect(iwmn.domains('example.com').update).to.be.a('function')
-
-			mitm.on('request', expectRequest('PATCH', '/domains/example.com', '{"auto_renew":false}'))
-			iwmn.domains('example.com').update({ auto_renew: false }, function () {
-				done()
-			})
-		})
-
-		describe('Nameservers', function () {
-			var nameservers = iwmn.domains('example.com').nameservers
-
-			it('has a nameservers endpoint', function () {
-				expect(nameservers).to.be.ok()
-				expect(nameservers.path).to.be.a('function')
-				expect(nameservers.path()).to.be('/domains/example.com/nameservers')
-				expect(nameservers.url).to.be.a('function')
-				expect(nameservers.url()).to.be('https://api.iwantmyname.com/domains/example.com/nameservers')
-			})
-			it('can list nameservers', function () {
-				expect(nameservers.list).to.be.a('function')
-			})
-			it('can replace nameservers', function () {
-				expect(nameservers.replace).to.be.a('function')
-			})
-		})
-
-		describe('Pending Updates', function () {
-			var pending = iwmn.domains('example.com').pending
-
-			it('has a pending updates endpoint', function () {
-				expect(pending).to.be.ok()
-				expect(pending.path).to.be.a('function')
-				expect(pending.path()).to.be('/domains/example.com/pending')
-				expect(pending.url).to.be.a('function')
-				expect(pending.url()).to.be('https://api.iwantmyname.com/domains/example.com/pending')
-			})
-
-			it('can list pending updates', function () {
-				expect(pending.list).to.be.a('function')
-			})
-		})
-
-		describe('Contacts', function () {
-			var contacts = iwmn.domains('example.com').contacts
-
-			it('has a contacts endpoint', function () {
-				expect(contacts).to.be.ok()
-				expect(contacts.path).to.be.a('function')
-				expect(contacts.path()).to.be('/domains/example.com/contacts')
-				expect(contacts.url).to.be.a('function')
-				expect(contacts.url()).to.be('https://api.iwantmyname.com/domains/example.com/contacts')
-			})
-			it('can get contacts', function () {
-				expect(contacts.get).to.be.a('function')
-			})
-			it('can update contacts', function () {
-				expect(contacts.update).to.be.a('function')
-			})
-			it('can replace contacts', function () {
-				expect(contacts.replace).to.be.a('function')
-			})
-			it('is a contact endpoint constructor', function () {
-				expect(contacts).to.be.a('function')
-			})
-
-			describe('Contact', function () {
-				var contact = contacts('owner')
-
-				it('can create a contact endpoint', function () {
-					expect(contact).to.be.ok()
-					expect(contact.path).to.be.a('function')
-					expect(contact.path()).to.be('/domains/example.com/contacts/owner')
-					expect(contact.url).to.be.a('function')
-					expect(contact.url()).to.be('https://api.iwantmyname.com/domains/example.com/contacts/owner')
-				})
-				it('can get a contact', function () {
-					expect(contact.get).to.be.a('function')
-				})
-				it('can update a contact', function () {
-					expect(contact.update).to.be.a('function')
-				})
-				it('can update a replace', function () {
-					expect(contact.replace).to.be.a('function')
+				mitm.on('request', expectRequest('GET', '/domains/example.com'))
+				iwmn.domains('example.com').get(function () {
+					done()
 				})
 			})
-		})
+			it('can update a domain', function (done) {
+				expect(iwmn.domains('example.com').update).to.be.a('function')
 
-		describe('DNS Records', function () {
-			var records = iwmn.domains('example.com').records
-
-			it('has a records endpoint', function () {
-				expect(records).to.be.ok()
-				expect(records.path).to.be.a('function')
-				expect(records.path()).to.be('/domains/example.com/records')
-				expect(records.url).to.be.a('function')
-				expect(records.url()).to.be('https://api.iwantmyname.com/domains/example.com/records')
-			})
-			it('can list records', function () {
-				expect(records.list).to.be.a('function')
-			})
-			it('can create records', function () {
-				expect(records.create).to.be.a('function')
-			})
-			it('can replace records', function () {
-				expect(records.replace).to.be.a('function')
-			})
-			it('is a record endpoint constructor', function () {
-				expect(records).to.be.a('function')
-			})
-
-			describe('DNS Record', function () {
-				var record = records(1)
-
-				it('can create a record endpoint', function () {
-					expect(record).to.be.ok()
-					expect(record.path).to.be.a('function')
-					expect(record.path()).to.be('/domains/example.com/records/1')
-					expect(record.url).to.be.a('function')
-					expect(record.url()).to.be('https://api.iwantmyname.com/domains/example.com/records/1')
-				})
-				it('can delete a record', function () {
-					expect(record.del).to.be.a('function')
+				mitm.on('request', expectRequest('PATCH', '/domains/example.com', '{"auto_renew":false}'))
+				iwmn.domains('example.com').update({ auto_renew: false }, function () {
+					done()
 				})
 			})
-		})
 
-		describe('Zone File', function () {
-			var zone = iwmn.domains('example.com').zone
+			describe('Nameservers', function () {
+				var nameservers = iwmn.domains('example.com').nameservers
 
-			it('has a zone file endpoint', function () {
-				expect(zone).to.be.ok()
-				expect(zone.path).to.be.a('function')
-				expect(zone.path()).to.be('/domains/example.com/zone')
-				expect(zone.url).to.be.a('function')
-				expect(zone.url()).to.be('https://api.iwantmyname.com/domains/example.com/zone')
-			})
-			it('can get the zone file', function () {
-				expect(zone.get).to.be.a('function')
-			})
-			it('can replace the zone file', function () {
-				expect(zone.replace).to.be.a('function')
-			})
-		})
-
-		describe('Apps', function () {
-			var apps = iwmn.domains('example.com').apps
-
-			it('has an apps endpoint', function () {
-				expect(apps).to.be.ok()
-				expect(apps.path).to.be.a('function')
-				expect(apps.path()).to.be('/domains/example.com/apps')
-				expect(apps.url).to.be.a('function')
-				expect(apps.url()).to.be('https://api.iwantmyname.com/domains/example.com/apps')
-			})
-			it('can list apps', function () {
-				expect(apps.list).to.be.a('function')
-			})
-			it('can create apps', function () {
-				expect(apps.create).to.be.a('function')
-			})
-			it('is an app endpoint constructor', function () {
-				expect(apps).to.be.a('function')
-			})
-
-			describe('App', function () {
-				var app = apps(1)
-
-				it('can create an app endpoint', function () {
-					expect(app).to.be.ok()
-					expect(app.path).to.be.a('function')
-					expect(app.path()).to.be('/domains/example.com/apps/1')
-					expect(app.url).to.be.a('function')
-					expect(app.url()).to.be('https://api.iwantmyname.com/domains/example.com/apps/1')
+				it('has a nameservers endpoint', function () {
+					expect(iwmn.domains('example.com').nameservers).to.be.ok()
+					expect(nameservers.path).to.be.a('function')
+					expect(nameservers.path()).to.be('/domains/example.com/nameservers')
+					expect(nameservers.url).to.be.a('function')
+					expect(nameservers.url()).to.be('https://api.iwantmyname.com/domains/example.com/nameservers')
 				})
-				it('can delete an app', function () {
-					expect(app.del).to.be.a('function')
+				it('can list nameservers', function () {
+					expect(nameservers.list).to.be.a('function')
+				})
+				it('can replace nameservers', function () {
+					expect(nameservers.replace).to.be.a('function')
+				})
+			})
+
+			describe('Pending Updates', function () {
+				var pending = iwmn.domains('example.com').pending
+
+				it('has a pending updates endpoint', function () {
+					expect(pending).to.be.ok()
+					expect(pending.path).to.be.a('function')
+					expect(pending.path()).to.be('/domains/example.com/pending')
+					expect(pending.url).to.be.a('function')
+					expect(pending.url()).to.be('https://api.iwantmyname.com/domains/example.com/pending')
+				})
+
+				it('can list pending updates', function () {
+					expect(pending.list).to.be.a('function')
+				})
+			})
+
+			describe('Contacts', function () {
+				var contacts = iwmn.domains('example.com').contacts
+
+				it('has a contacts endpoint', function () {
+					expect(contacts).to.be.ok()
+					expect(contacts.path).to.be.a('function')
+					expect(contacts.path()).to.be('/domains/example.com/contacts')
+					expect(contacts.url).to.be.a('function')
+					expect(contacts.url()).to.be('https://api.iwantmyname.com/domains/example.com/contacts')
+				})
+				it('can get contacts', function () {
+					expect(contacts.get).to.be.a('function')
+				})
+				it('can update contacts', function () {
+					expect(contacts.update).to.be.a('function')
+				})
+				it('can replace contacts', function () {
+					expect(contacts.replace).to.be.a('function')
+				})
+				it('is a contact endpoint constructor', function () {
+					expect(contacts).to.be.a('function')
+				})
+
+				describe('Contact', function () {
+					var contact = contacts('owner')
+
+					it('can create a contact endpoint', function () {
+						expect(contact).to.be.ok()
+						expect(contact.path).to.be.a('function')
+						expect(contact.path()).to.be('/domains/example.com/contacts/owner')
+						expect(contact.url).to.be.a('function')
+						expect(contact.url()).to.be('https://api.iwantmyname.com/domains/example.com/contacts/owner')
+					})
+					it('can get a contact', function () {
+						expect(contact.get).to.be.a('function')
+					})
+					it('can update a contact', function () {
+						expect(contact.update).to.be.a('function')
+					})
+					it('can update a replace', function () {
+						expect(contact.replace).to.be.a('function')
+					})
+				})
+			})
+
+			describe('DNS Records', function () {
+				var records = iwmn.domains('example.com').records
+
+				it('has a records endpoint', function () {
+					expect(records).to.be.ok()
+					expect(records.path).to.be.a('function')
+					expect(records.path()).to.be('/domains/example.com/records')
+					expect(records.url).to.be.a('function')
+					expect(records.url()).to.be('https://api.iwantmyname.com/domains/example.com/records')
+				})
+				it('can list records', function () {
+					expect(records.list).to.be.a('function')
+				})
+				it('can create records', function () {
+					expect(records.create).to.be.a('function')
+				})
+				it('can replace records', function () {
+					expect(records.replace).to.be.a('function')
+				})
+				it('is a record endpoint constructor', function () {
+					expect(records).to.be.a('function')
+				})
+
+				describe('DNS Record', function () {
+					var record = records(1)
+
+					it('can create a record endpoint', function () {
+						expect(record).to.be.ok()
+						expect(record.path).to.be.a('function')
+						expect(record.path()).to.be('/domains/example.com/records/1')
+						expect(record.url).to.be.a('function')
+						expect(record.url()).to.be('https://api.iwantmyname.com/domains/example.com/records/1')
+					})
+					it('can delete a record', function () {
+						expect(record.del).to.be.a('function')
+					})
+				})
+			})
+
+			describe('Zone File', function () {
+				var zone = iwmn.domains('example.com').zone
+
+				it('has a zone file endpoint', function () {
+					expect(zone).to.be.ok()
+					expect(zone.path).to.be.a('function')
+					expect(zone.path()).to.be('/domains/example.com/zone')
+					expect(zone.url).to.be.a('function')
+					expect(zone.url()).to.be('https://api.iwantmyname.com/domains/example.com/zone')
+				})
+				it('can get the zone file', function () {
+					expect(zone.get).to.be.a('function')
+				})
+				it('can replace the zone file', function () {
+					expect(zone.replace).to.be.a('function')
+				})
+			})
+
+			describe('Apps', function () {
+				var apps = iwmn.domains('example.com').apps
+
+				it('has an apps endpoint', function () {
+					expect(apps).to.be.ok()
+					expect(apps.path).to.be.a('function')
+					expect(apps.path()).to.be('/domains/example.com/apps')
+					expect(apps.url).to.be.a('function')
+					expect(apps.url()).to.be('https://api.iwantmyname.com/domains/example.com/apps')
+				})
+				it('can list apps', function () {
+					expect(apps.list).to.be.a('function')
+				})
+				it('can create apps', function () {
+					expect(apps.create).to.be.a('function')
+				})
+				it('is an app endpoint constructor', function () {
+					expect(apps).to.be.a('function')
+				})
+
+				describe('App', function () {
+					var app = apps(1)
+
+					it('can create an app endpoint', function () {
+						expect(app).to.be.ok()
+						expect(app.path).to.be.a('function')
+						expect(app.path()).to.be('/domains/example.com/apps/1')
+						expect(app.url).to.be.a('function')
+						expect(app.url()).to.be('https://api.iwantmyname.com/domains/example.com/apps/1')
+					})
+					it('can delete an app', function () {
+						expect(app.del).to.be.a('function')
+					})
 				})
 			})
 		})
