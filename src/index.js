@@ -50,7 +50,7 @@ Section.prototype.token = function () {
 }
 
 
-function list (done) {
+function getJSON (done) {
 	return request
 		.get(this.url())
 		.set('Authorization', this.token())
@@ -59,16 +59,7 @@ function list (done) {
 			done && done(err, res.body, res)
 		})
 }
-function get (done) {
-	return request
-		.get(this.url())
-		.set('Authorization', this.token())
-		.set('Accept', 'application/json')
-		.end(function (err, res) {
-			done && done(err, res.body, res)
-		})
-}
-function create (data, done) {
+function postJSON (data, done) {
 	return request
 		.post(this.url())
 		.set('Authorization', this.token())
@@ -79,7 +70,7 @@ function create (data, done) {
 			done && done(err, res.body, res)
 		})
 }
-function update (data, done) {
+function patchJSON (data, done) {
 	return request
 		.patch(this.url())
 		.set('Authorization', this.token())
@@ -90,7 +81,7 @@ function update (data, done) {
 			done && done(err, res.body, res)
 		})
 }
-function replace (data, done) {
+function putJSON (data, done) {
 	return request
 		.put(this.url())
 		.set('Authorization', this.token())
@@ -101,7 +92,7 @@ function replace (data, done) {
 			done && done(err, res.body, res)
 		})
 }
-function del (done) {
+function deleteJSON (done) {
 	return request
 		.del(this.url())
 		.set('Authorization', this.token())
@@ -112,31 +103,53 @@ function del (done) {
 }
 
 
+function getText (done) {
+	return request
+		.get(this.url())
+		.set('Authorization', this.token())
+		.set('Accept', 'text/plain')
+		.end(function (err, res) {
+			done && done(err, res.body, res)
+		})
+}
+function putText (data, done) {
+	return request
+		.put(this.url())
+		.set('Authorization', this.token())
+		.set('Accept', 'text/plain')
+		.set('Content-Type', 'text/plain')
+		.send(data)
+		.end(function (err, res) {
+			done && done(err, res.body, res)
+		})
+}
+
+
 function Nameservers (parent) {
 	return new Section(parent, '/nameservers', function () {
-		this.list = list
-		this.replace = replace
+		this.list = getJSON
+		this.replace = putJSON
 	})
 }
 
 function PendingUpdates (parent) {
 	return new Section(parent, '/pending', function () {
-		this.list = list
+		this.list = getJSON
 	})
 }
 
 function Contacts (parent) {
 	function Contact (type) {
 		return new Section(Contact, '/' + encodeURIComponent(type), function () {
-			this.get = get
-			this.replace = replace
-			this.update = update
+			this.get = getJSON
+			this.replace = putJSON
+			this.update = patchJSON
 		})
 	}
 	Section.call(Contact, parent, '/contacts', function () {
-		this.get = get
-		this.replace = replace
-		this.update = update
+		this.get = getJSON
+		this.replace = putJSON
+		this.update = patchJSON
 	})
 	return Contact
 }
@@ -144,8 +157,8 @@ function Contacts (parent) {
 function Domains (parent) {
 	function Domain (domain) {
 		return new Section(Domain, '/' + encodeURIComponent(domain), function () {
-			this.get = get
-			this.update = update
+			this.get = getJSON
+			this.update = patchJSON
 			this.nameservers = Nameservers(this)
 			this.pending = PendingUpdates(this)
 			this.contacts = Contacts(this)
@@ -155,7 +168,7 @@ function Domains (parent) {
 		})
 	}
 	Section.call(Domain, parent, '/domains', function () {
-		this.list = list
+		this.list = getJSON
 	})
 	return Domain
 }
@@ -163,11 +176,11 @@ function Domains (parent) {
 function Transfers (parent) {
 	function Transfer (domain) {
 		return new Section(Transfer, '/' + encodeURIComponent(domain), function () {
-			this.replace = replace
+			this.replace = putJSON
 		})
 	}
 	Section.call(Transfer, parent, '/transfers', function () {
-		this.list = list
+		this.list = getJSON
 	})
 	return Transfer
 }
@@ -175,47 +188,47 @@ function Transfers (parent) {
 function Records (parent) {
 	function Record (id) {
 		return new Section(Record, '/' + encodeURIComponent(id), function () {
-			this.del = del
+			this.del = deleteJSON
 		})
 	}
 	Section.call(Record, parent, '/records', function () {
-		this.list = list
-		this.create = create
-		this.replace = replace
+		this.list = getJSON
+		this.create = postJSON
+		this.replace = putJSON
 	})
 	return Record
 }
 
 function Zone (parent) {
 	return new Section(parent, '/zone', function () {
-		this.get = get
-		this.replace = replace
+		this.get = getText
+		this.replace = putText
 	})
 }
 
 function Apps (parent) {
 	return new Section(parent, '/apps', function () {
-		this.list = list
+		this.list = getJSON
 	})
 }
 
 function DomainApps (parent) {
 	function DomainApp (id) {
 		return new Section(DomainApp, '/' + encodeURIComponent(id), function () {
-			this.del = del
+			this.del = deleteJSON
 		})
 	}
 	Section.call(DomainApp, parent, '/apps', function () {
-		this.list = list
-		this.create = create
+		this.list = getJSON
+		this.create = postJSON
 	})
 	return DomainApp
 }
 
 function Account (parent) {
 	return new Section(parent, '/account', function () {
-		this.get = get
-		this.update = update
+		this.get = getJSON
+		this.update = patchJSON
 		this.default_nameservers = DefaultNameservers(this)
 		this.default_contact = DefaultContact(this)
 		this.billing = BillingProfiles(this)
@@ -225,28 +238,28 @@ function Account (parent) {
 
 function DefaultNameservers (parent) {
 	return new Section(parent, '/default_nameservers', function () {
-		this.list = list
-		this.replace = replace
+		this.list = getJSON
+		this.replace = putJSON
 	})
 }
 
 function DefaultContact (parent) {
 	return new Section(parent, '/default_contact', function () {
-		this.get = get
-		this.update = update
-		this.replace = replace
+		this.get = getJSON
+		this.update = patchJSON
+		this.replace = putJSON
 	})
 }
 
 function BillingProfiles (parent) {
 	function BillingProfile (id) {
 		return new Section(BillingProfile, '/' + encodeURIComponent(id), function () {
-			this.del = del
+			this.del = deleteJSON
 		})
 	}
 	Section.call(BillingProfile, parent, '/billing', function () {
-		this.list = list
-		this.create = create
+		this.list = getJSON
+		this.create = postJSON
 	})
 	return BillingProfile
 }
@@ -254,11 +267,11 @@ function BillingProfiles (parent) {
 function Receipts (parent) {
 	function Receipt (id) {
 		return new Section(Receipt, '/' + encodeURIComponent(id), function () {
-			this.get = get
+			this.get = getJSON
 		})
 	}
 	Section.call(Receipt, parent, '/receipts', function () {
-		this.list = list
+		this.list = getJSON
 	})
 	return Receipt
 }
@@ -266,11 +279,11 @@ function Receipts (parent) {
 function Products (parent) {
 	function Product (product) {
 		return new Section(Product, '/' + encodeURIComponent(product), function () {
-			this.get = get
+			this.get = getJSON
 		})
 	}
 	Section.call(Product, parent, '/products', function () {
-		this.list = list
+		this.list = getJSON
 	})
 	return Product
 }
@@ -278,11 +291,11 @@ function Products (parent) {
 function TLDs (parent) {
 	function TLD (tld) {
 		return new Section(TLD, '/' + encodeURIComponent(tld), function () {
-			this.get = get
+			this.get = getJSON
 		})
 	}
 	Section.call(TLD, parent, '/tlds', function () {
-		this.list = list
+		this.list = getJSON
 	})
 	return TLD
 }
@@ -290,11 +303,11 @@ function TLDs (parent) {
 function SearchResults (parent) {
 	function SearchResult (domain) {
 		return new Section(SearchResult, '/' + encodeURIComponent(domain), function () {
-			this.get = get
+			this.get = getJSON
 		})
 	}
 	Section.call(SearchResult, parent, '/search/results', function () {
-		this.list = list
+		this.list = getJSON
 	})
 	return SearchResult
 }
