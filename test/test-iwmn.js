@@ -374,226 +374,148 @@ describe('IWMN Client', function () {
 	})
 
 	describe('Account', function () {
-		var account = iwmn.account
-
 		it('has an account endpoint', function () {
-			expect(account).to.be.ok()
-			expect(account.path).to.be.a('function')
-			expect(account.path()).to.be('/account')
-			expect(account.url).to.be.a('function')
-			expect(account.url()).to.be('https://api.iwantmyname.com/account')
+			expect(iwmn.account).to.be.ok()
 		})
-		it('can get account details', function () {
-			expect(account.get).to.be.a('function')
+		it('can get account details', function (done) {
+			expect(iwmn.account.get).to.be.a('function')
 		})
-		it('can update account details', function () {
-			expect(account.update).to.be.a('function')
+		it('can update account details', function (done) {
+			expect(iwmn.account.update).to.be.a('function')
 		})
 
 		describe('Default Contact', function () {
-			var contact = account.default_contact
-
 			it('has a default contact endpoint', function () {
-				expect(contact).to.be.ok()
-				expect(contact.path).to.be.a('function')
-				expect(contact.path()).to.be('/account/default_contact')
-				expect(contact.url).to.be.a('function')
-				expect(contact.url()).to.be('https://api.iwantmyname.com/account/default_contact')
+				expect(iwmn.account.default_contact).to.be.ok()
 			})
-			it('can get default contact details', function () {
-				expect(contact.get).to.be.a('function')
+			it('can get default contact details', function (done) {
+				expect(iwmn.account.default_contact.get).to.be.a('function')
 			})
-			it('can update default contact details', function () {
-				expect(contact.update).to.be.a('function')
+			it('can update default contact details', function (done) {
+				expect(iwmn.account.default_contact.update).to.be.a('function')
 			})
-			it('can replace default contact details', function () {
-				expect(contact.replace).to.be.a('function')
+			it('can replace default contact details', function (done) {
+				expect(iwmn.account.default_contact.replace).to.be.a('function')
 			})
 		})
 
 		describe('Default Nameservers', function () {
-			var nameservers = account.default_nameservers
-
 			it('has a default nameservers endpoint', function () {
-				expect(nameservers).to.be.ok()
-				expect(nameservers.path).to.be.a('function')
-				expect(nameservers.path()).to.be('/account/default_nameservers')
-				expect(nameservers.url).to.be.a('function')
-				expect(nameservers.url()).to.be('https://api.iwantmyname.com/account/default_nameservers')
+				expect(iwmn.account.default_nameservers).to.be.ok()
 			})
-			it('can list default nameservers', function () {
-				expect(nameservers.list).to.be.a('function')
+			it('can list default nameservers', function (done) {
+				expect(iwmn.account.default_nameservers.list).to.be.a('function')
 			})
-			it('can replace default nameservers', function () {
-				expect(nameservers.replace).to.be.a('function')
+			it('can replace default nameservers', function (done) {
+				expect(iwmn.account.default_nameservers.replace).to.be.a('function')
 			})
 		})
 
 		describe('Billing Profiles', function () {
-			var billing = account.billing
-
 			it('has a billing profiles endpoint', function () {
-				expect(billing).to.be.ok()
-				expect(billing.path).to.be.a('function')
-				expect(billing.path()).to.be('/account/billing')
-				expect(billing.url).to.be.a('function')
-				expect(billing.url()).to.be('https://api.iwantmyname.com/account/billing')
+				expect(iwmn.account.billing).to.be.ok()
 			})
-			it('can list billing profiles', function () {
-				expect(billing.list).to.be.a('function')
+			it('can list billing profiles', function (done) {
+				expect(iwmn.account.billing.list).to.be.a('function')
 			})
-			it('can create billing profiles', function () {
-				expect(billing.create).to.be.a('function')
-			})
-			it('is a billing profile endpoint constructor', function () {
-				expect(billing).to.be.a('function')
+			it('can create billing profiles', function (done) {
+				expect(iwmn.account.billing.create).to.be.a('function')
 			})
 
 			describe('Profile', function () {
-				var profile = billing(1)
-
-				it('has a billing profile endpoint', function () {
-					expect(profile).to.be.ok()
-					expect(profile.path).to.be.a('function')
-					expect(profile.path()).to.be('/account/billing/1')
-					expect(profile.url).to.be.a('function')
-					expect(profile.url()).to.be('https://api.iwantmyname.com/account/billing/1')
+				it('has a billing profile endpoint constructor', function () {
+					expect(iwmn.account.billing).to.be.a('function')
 				})
-				it('can delete a billing profile', function () {
-					expect(profile.del).to.be.a('function')
+				it('has a billing profile endpoint', function () {
+					expect(iwmn.account.billing(1)).to.be.ok()
+				})
+				it('can delete a billing profile', function (done) {
+					expect(iwmn.account.billing(1).del).to.be.a('function')
 				})
 			})
 		})
 
 		describe('Receipts', function () {
-			var receipts = account.receipts
-
 			it('has a receipts endpoint', function () {
-				expect(receipts).to.be.ok()
-				expect(receipts.path).to.be.a('function')
-				expect(receipts.path()).to.be('/account/receipts')
-				expect(receipts.url).to.be.a('function')
-				expect(receipts.url()).to.be('https://api.iwantmyname.com/account/receipts')
+				expect(iwmn.account.receipts).to.be.ok()
 			})
-			it('can list receipts', function () {
-				expect(receipts.list).to.be.a('function')
-			})
-			it('is a receipt endpoint constructor', function () {
-				expect(receipts).to.be.a('function')
+			it('can list receipts', function (done) {
+				expect(iwmn.account.receipts.list).to.be.a('function')
 			})
 
 			describe('Receipt', function () {
-				var receipt = receipts(1)
-
-				it('has a receipt endpoint', function () {
-					expect(receipt).to.be.ok()
-					expect(receipt.path).to.be.a('function')
-					expect(receipt.path()).to.be('/account/receipts/1')
-					expect(receipt.url).to.be.a('function')
-					expect(receipt.url()).to.be('https://api.iwantmyname.com/account/receipts/1')
+				it('has a receipt endpoint constructor', function () {
+					expect(iwmn.account.receipts).to.be.a('function')
 				})
-				it('can get a receipt', function () {
-					expect(receipt.get).to.be.a('function')
+				it('has a receipt endpoint', function () {
+					expect(iwmn.account.receipts(1)).to.be.ok()
+				})
+				it('can get a receipt', function (done) {
+					expect(iwmn.account.receipts(1).get).to.be.a('function')
 				})
 			})
 		})
 	})
 
 	describe('Products', function () {
-		var products = iwmn.products
-
 		it('has a products endpoint', function () {
-			expect(products).to.be.ok()
-			expect(products.path).to.be.a('function')
-			expect(products.path()).to.be('/products')
-			expect(products.url).to.be.a('function')
-			expect(products.url()).to.be('https://api.iwantmyname.com/products')
+			expect(iwmn.products).to.be.ok()
 		})
-		it('can list products', function () {
-			expect(products.list).to.be.a('function')
-		})
-		it('is a product endpoint constructor', function () {
-			expect(products).to.be.a('function')
+		it('can list products', function (done) {
+			expect(iwmn.products.list).to.be.a('function')
 		})
 
 		describe('Product', function () {
-			var product = products('com')
-
-			it('has a product endpoint', function () {
-				expect(product).to.be.ok()
-				expect(product.path).to.be.a('function')
-				expect(product.path()).to.be('/products/com')
-				expect(product.url).to.be.a('function')
-				expect(product.url()).to.be('https://api.iwantmyname.com/products/com')
+			it('has a product endpoint constructor', function () {
+				expect(iwmn.products).to.be.a('function')
 			})
-			it('can get a product', function () {
-				expect(product.get).to.be.a('function')
+			it('has a product endpoint', function () {
+				expect(iwmn.products('com')).to.be.ok()
+			})
+			it('can get a product', function (done) {
+				expect(iwmn.products('com').get).to.be.a('function')
 			})
 		})
 	})
 
 	describe('TLDs', function () {
-		var tlds = iwmn.tlds
-
 		it('has a TLDs endpoint', function () {
-			expect(tlds).to.be.ok()
-			expect(tlds.path).to.be.a('function')
-			expect(tlds.path()).to.be('/tlds')
-			expect(tlds.url).to.be.a('function')
-			expect(tlds.url()).to.be('https://api.iwantmyname.com/tlds')
+			expect(iwmn.tlds).to.be.ok()
 		})
-		it('can list TLDs', function () {
-			expect(tlds.list).to.be.a('function')
-		})
-		it('is a TLD endpoint constructor', function () {
-			expect(tlds).to.be.a('function')
+		it('can list TLDs', function (done) {
+			expect(iwmn.tlds.list).to.be.a('function')
 		})
 
 		describe('TLD', function () {
-			var tld = tlds('com')
-
-			it('has a TLD endpoint', function () {
-				expect(tld).to.be.ok()
-				expect(tld.path).to.be.a('function')
-				expect(tld.path()).to.be('/tlds/com')
-				expect(tld.url).to.be.a('function')
-				expect(tld.url()).to.be('https://api.iwantmyname.com/tlds/com')
+			it('has a TLD endpoint constructor', function () {
+				expect(iwmn.tlds).to.be.a('function')
 			})
-			it('can get a TLD', function () {
-				expect(tld.get).to.be.a('function')
+			it('has a TLD endpoint', function () {
+				expect(iwmn.tlds('com')).to.be.ok()
+			})
+			it('can get a TLD', function (done) {
+				expect(iwmn.tlds('com').get).to.be.a('function')
 			})
 		})
 	})
 
 	describe('Search Results', function () {
-		var results = iwmn.searchResults
-
 		it('has a search results endpoint', function () {
-			expect(results).to.be.ok()
-			expect(results.path).to.be.a('function')
-			expect(results.path()).to.be('/search/results')
-			expect(results.url).to.be.a('function')
-			expect(results.url()).to.be('https://api.iwantmyname.com/search/results')
+			expect(iwmn.searchResults).to.be.ok()
 		})
-		it('can list search results', function () {
-			expect(results.list).to.be.a('function')
-		})
-		it('is a search result endpoint constructor', function () {
-			expect(results).to.be.a('function')
+		it('can list search results', function (done) {
+			expect(iwmn.searchResults.list).to.be.a('function')
 		})
 
 		describe('Result', function () {
-			var result = results('example.com')
-
-			it('has a search result endpoint', function () {
-				expect(result).to.be.ok()
-				expect(result.path).to.be.a('function')
-				expect(result.path()).to.be('/search/results/example.com')
-				expect(result.url).to.be.a('function')
-				expect(result.url()).to.be('https://api.iwantmyname.com/search/results/example.com')
+			it('has a search result endpoint constructor', function () {
+				expect(iwmn.searchResults).to.be.a('function')
 			})
-			it('can get a search result', function () {
-				expect(result.get).to.be.a('function')
+			it('has a search result endpoint', function () {
+				expect(iwmn.searchResults('example.com')).to.be.ok()
+			})
+			it('can get a search result', function (done) {
+				expect(iwmn.searchResults('example.com').get).to.be.a('function')
 			})
 		})
 	})
