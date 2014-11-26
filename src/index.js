@@ -138,20 +138,24 @@ function PendingUpdates (parent) {
 	})
 }
 
-function Contacts (parent) {
-	function Contact (type) {
-		return new Section(Contact, '/' + encodeURIComponent(type), function () {
-			this.get = getJSON
-			this.replace = putJSON
-			this.update = patchJSON
-		})
-	}
-	Section.call(Contact, parent, '/contacts', function () {
+function Contact (parent, type) {
+	return new Section(parent, '/' + encodeURIComponent(type), function () {
 		this.get = getJSON
 		this.replace = putJSON
 		this.update = patchJSON
 	})
-	return Contact
+}
+
+function Contacts (parent) {
+	return new Section(parent, '/contacts', function () {
+		this.get = getJSON
+		this.replace = putJSON
+		this.update = patchJSON
+		this.owner = Contact(this, 'owner')
+		this.admin = Contact(this, 'admin')
+		this.tech = Contact(this, 'tech')
+		this.billing = Contact(this, 'billing')
+	})
 }
 
 function Domains (parent) {
