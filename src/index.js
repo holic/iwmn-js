@@ -207,9 +207,15 @@ function Zone (parent) {
 }
 
 function Apps (parent) {
-	return new Section(parent, '/apps', function () {
+	function App (app) {
+		return new Section(App, '/' + encodeURIComponent(app), function () {
+			this.get = getJSON
+		})
+	}
+	Section.call(App, parent, '/apps', function () {
 		this.list = getJSON
 	})
+	return App
 }
 
 function DomainApps (parent) {
