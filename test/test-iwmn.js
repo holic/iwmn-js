@@ -145,35 +145,37 @@ describe('IWMN Client', function () {
 					})
 				})
 
-				describe('Contact', function () {
-					it('has a contact endpoint constructor', function () {
-						expect(iwmn.domains('example.com').contacts).to.be.a('function')
-					})
-					it('can create a contact endpoint', function () {
-						expect(iwmn.domains('example.com').contacts('owner')).to.be.ok()
-					})
-					it('can get a contact', function (done) {
-						expect(iwmn.domains('example.com').contacts('owner').get).to.be.a('function')
+				var types = ['Owner', 'Admin', 'Tech', 'Billing']
+				types.forEach(function (type) {
+					var key = type.toLowerCase()
 
-						mitm.on('request', expectRequest('GET', '/domains/example.com/contacts/owner'))
-						iwmn.domains('example.com').contacts('owner').get(function () {
-							done()
+					describe(type + ' Contact', function () {
+						it('has ' + key + ' contact endpoint', function () {
+							expect(iwmn.domains('example.com').contacts[key]).to.be.ok()
 						})
-					})
-					it('can update a contact', function (done) {
-						expect(iwmn.domains('example.com').contacts('owner').update).to.be.a('function')
+						it('can get ' + key + ' contact', function (done) {
+							expect(iwmn.domains('example.com').contacts[key].get).to.be.a('function')
 
-						mitm.on('request', expectRequest('PATCH', '/domains/example.com/contacts/owner', '{"first_name":"John"}'))
-						iwmn.domains('example.com').contacts('owner').update({ first_name: 'John' }, function () {
-							done()
+							mitm.on('request', expectRequest('GET', '/domains/example.com/contacts/' + key))
+							iwmn.domains('example.com').contacts[key].get(function () {
+								done()
+							})
 						})
-					})
-					it('can update a replace', function (done) {
-						expect(iwmn.domains('example.com').contacts('owner').replace).to.be.a('function')
+						it('can update the ' + key + ' contact', function (done) {
+							expect(iwmn.domains('example.com').contacts[key].update).to.be.a('function')
 
-						mitm.on('request', expectRequest('PUT', '/domains/example.com/contacts/owner', '{"first_name":"John"}'))
-						iwmn.domains('example.com').contacts('owner').replace({ first_name: 'John' }, function () {
-							done()
+							mitm.on('request', expectRequest('PATCH', '/domains/example.com/contacts/' + key, '{"first_name":"John"}'))
+							iwmn.domains('example.com').contacts[key].update({ first_name: 'John' }, function () {
+								done()
+							})
+						})
+						it('can replace the ' + key + ' contact', function (done) {
+							expect(iwmn.domains('example.com').contacts[key].replace).to.be.a('function')
+
+							mitm.on('request', expectRequest('PUT', '/domains/example.com/contacts/' + key, '{"first_name":"John"}'))
+							iwmn.domains('example.com').contacts[key].replace({ first_name: 'John' }, function () {
+								done()
+							})
 						})
 					})
 				})
