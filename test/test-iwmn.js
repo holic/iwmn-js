@@ -1,52 +1,82 @@
 var expect = require('expect.js')
+var Mitm = require('mitm')
 
-var IWMN = require('../src/index.js')
+var IWMN = require('..')
 
 
 describe('IWMN Client', function () {
 	var iwmn = new IWMN('EXAMPLE_TOKEN')
+	var mitm
+
+	beforeEach(function () {
+		mitm = Mitm()
+	})
+	afterEach(function () {
+		mitm.disable()
+	})
 
 	it('has a token', function () {
-		expect(iwmn.token()).to.be('EXAMPLE_TOKEN')
+		expect(iwmn.TOKEN).to.be('EXAMPLE_TOKEN')
 	})
 
 	describe('Domains', function () {
-		var domains = iwmn.domains
-
 		it('has a domains endpoint', function () {
-			expect(domains).to.be.ok()
-			expect(domains.path).to.be.a('function')
-			expect(domains.path()).to.be('/domains')
-			expect(domains.url).to.be.a('function')
-			expect(domains.url()).to.be('https://api.iwantmyname.com/domains')
+			expect(iwmn.domains).to.be.ok()
 		})
-		it('can list domains', function () {
-			expect(domains.list).to.be.a('function')
-		})
-		it('is a domain endpoint constructor', function () {
-			expect(domains).to.be.a('function')
+		it('can list domains', function (done) {
+			expect(iwmn.domains.list).to.be.a('function')
+
+			mitm.on('request', function (req, res) {
+				expect(req.method).to.be('GET')
+				expect(req.url).to.be('/domains')
+				expect(req.headers.host).to.be('api.iwantmyname.com')
+				expect(req.headers.accept).to.be('application/json')
+				expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
+				done()
+			})
+
+			iwmn.domains.list()
 		})
 	})
 
 	describe('Domain', function () {
-		var domain = iwmn.domains('example.com')
-
+		it('has a domain endpoint constructor', function () {
+			expect(iwmn.domains).to.be.a('function')
+		})
 		it('can create a domain endpoint', function () {
-			expect(domain).to.be.ok()
-			expect(domain.path).to.be.a('function')
-			expect(domain.path()).to.be('/domains/example.com')
-			expect(domain.url).to.be.a('function')
-			expect(domain.url()).to.be('https://api.iwantmyname.com/domains/example.com')
+			expect(iwmn.domains('example.com')).to.be.ok()
 		})
-		it('can get a domain', function () {
-			expect(domain.get).to.be.a('function')
+		it('can get a domain', function (done) {
+			expect(iwmn.domains('example.com').get).to.be.a('function')
+
+			mitm.on('request', function (req, res) {
+				expect(req.method).to.be('GET')
+				expect(req.url).to.be('/domains/example.com')
+				expect(req.headers.host).to.be('api.iwantmyname.com')
+				expect(req.headers.accept).to.be('application/json')
+				expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
+				done()
+			})
+
+			iwmn.domains('example.com').get()
 		})
-		it('can update a domain', function () {
-			expect(domain.update).to.be.a('function')
+		it('can update a domain', function (done) {
+			expect(iwmn.domains('example.com').update).to.be.a('function')
+
+			mitm.on('request', function (req, res) {
+				expect(req.method).to.be('PATCH')
+				expect(req.url).to.be('/domains/example.com')
+				expect(req.headers.host).to.be('api.iwantmyname.com')
+				expect(req.headers.accept).to.be('application/json')
+				expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
+				done()
+			})
+
+			iwmn.domains('example.com').update()
 		})
 
 		describe('Nameservers', function () {
-			var nameservers = domain.nameservers
+			var nameservers = iwmn.domains('example.com').nameservers
 
 			it('has a nameservers endpoint', function () {
 				expect(nameservers).to.be.ok()
@@ -64,7 +94,7 @@ describe('IWMN Client', function () {
 		})
 
 		describe('Pending Updates', function () {
-			var pending = domain.pending
+			var pending = iwmn.domains('example.com').pending
 
 			it('has a pending updates endpoint', function () {
 				expect(pending).to.be.ok()
@@ -80,7 +110,7 @@ describe('IWMN Client', function () {
 		})
 
 		describe('Contacts', function () {
-			var contacts = domain.contacts
+			var contacts = iwmn.domains('example.com').contacts
 
 			it('has a contacts endpoint', function () {
 				expect(contacts).to.be.ok()
@@ -125,7 +155,7 @@ describe('IWMN Client', function () {
 		})
 
 		describe('DNS Records', function () {
-			var records = domain.records
+			var records = iwmn.domains('example.com').records
 
 			it('has a records endpoint', function () {
 				expect(records).to.be.ok()
@@ -164,7 +194,7 @@ describe('IWMN Client', function () {
 		})
 
 		describe('Zone File', function () {
-			var zone = domain.zone
+			var zone = iwmn.domains('example.com').zone
 
 			it('has a zone file endpoint', function () {
 				expect(zone).to.be.ok()
@@ -182,7 +212,7 @@ describe('IWMN Client', function () {
 		})
 
 		describe('Apps', function () {
-			var apps = domain.apps
+			var apps = iwmn.domains('example.com').apps
 
 			it('has an apps endpoint', function () {
 				expect(apps).to.be.ok()
