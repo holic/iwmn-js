@@ -15,6 +15,30 @@ describe('IWMN Client', function () {
 		mitm.disable()
 	})
 
+
+	function expectRequest (method, url, body) {
+		return function (req, res) {
+			expect(req.method).to.be(method)
+			expect(req.url).to.be(url)
+			expect(req.headers.host).to.be('api.iwantmyname.com')
+			expect(req.headers.accept).to.be('application/json')
+			expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
+
+			if (body) {
+				expect(req.headers['content-type']).to.be('application/json')
+				req.setEncoding('utf8')
+				req.on('data', function (data) {
+					expect(data).to.be(body)
+					res.end()
+				})
+			}
+			else {
+				res.end()
+			}
+		}
+	}
+
+
 	it('has a token', function () {
 		expect(iwmn.TOKEN).to.be('EXAMPLE_TOKEN')
 	})
@@ -26,16 +50,10 @@ describe('IWMN Client', function () {
 		it('can list domains', function (done) {
 			expect(iwmn.domains.list).to.be.a('function')
 
-			mitm.on('request', function (req, res) {
-				expect(req.method).to.be('GET')
-				expect(req.url).to.be('/domains')
-				expect(req.headers.host).to.be('api.iwantmyname.com')
-				expect(req.headers.accept).to.be('application/json')
-				expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
+			mitm.on('request', expectRequest('GET', '/domains'))
+			iwmn.domains.list(function () {
 				done()
 			})
-
-			iwmn.domains.list()
 		})
 	})
 
@@ -49,15 +67,7 @@ describe('IWMN Client', function () {
 		it('can get a domain', function (done) {
 			expect(iwmn.domains('example.com').get).to.be.a('function')
 
-			mitm.on('request', function (req, res) {
-				expect(req.method).to.be('GET')
-				expect(req.url).to.be('/domains/example.com')
-				expect(req.headers.host).to.be('api.iwantmyname.com')
-				expect(req.headers.accept).to.be('application/json')
-				expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
-				res.end()
-			})
-
+			mitm.on('request', expectRequest('GET', '/domains/example.com'))
 			iwmn.domains('example.com').get(function () {
 				done()
 			})
@@ -65,20 +75,7 @@ describe('IWMN Client', function () {
 		it('can update a domain', function (done) {
 			expect(iwmn.domains('example.com').update).to.be.a('function')
 
-			mitm.on('request', function (req, res) {
-				expect(req.method).to.be('PATCH')
-				expect(req.url).to.be('/domains/example.com')
-				expect(req.headers.host).to.be('api.iwantmyname.com')
-				expect(req.headers.accept).to.be('application/json')
-				expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
-				expect(req.headers['content-type']).to.be('application/json')
-				req.setEncoding('utf8')
-				req.on('data', function (data) {
-					expect(data).to.be('{"auto_renew":false}')
-					res.end()
-				})
-			})
-
+			mitm.on('request', expectRequest('PATCH', '/domains/example.com', '{"auto_renew":false}'))
 			iwmn.domains('example.com').update({ auto_renew: false }, function () {
 				done()
 			})
