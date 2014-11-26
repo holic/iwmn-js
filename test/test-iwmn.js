@@ -227,20 +227,46 @@ describe('IWMN Client', function () {
 			})
 
 			describe('Zone File', function () {
-				var zone = iwmn.domains('example.com').zone
-
 				it('has a zone file endpoint', function () {
-					expect(zone).to.be.ok()
-					expect(zone.path).to.be.a('function')
-					expect(zone.path()).to.be('/domains/example.com/zone')
-					expect(zone.url).to.be.a('function')
-					expect(zone.url()).to.be('https://api.iwantmyname.com/domains/example.com/zone')
+					expect(iwmn.domains('example.com').zone).to.be.ok()
 				})
-				it('can get the zone file', function () {
-					expect(zone.get).to.be.a('function')
+				it('can get the zone file', function (done) {
+					expect(iwmn.domains('example.com').zone.get).to.be.a('function')
+
+					mitm.on('request', function (req, res) {
+						expect(req.method).to.be('GET')
+						expect(req.url).to.be('/domains/example.com/zone')
+						expect(req.headers.host).to.be('api.iwantmyname.com')
+						expect(req.headers.accept).to.be('text/plain')
+						expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
+						res.end()
+					})
+
+					iwmn.domains('example.com').zone.get(function () {
+						done()
+					})
 				})
-				it('can replace the zone file', function () {
-					expect(zone.replace).to.be.a('function')
+				it('can replace the zone file', function (done) {
+					expect(iwmn.domains('example.com').zone.replace).to.be.a('function')
+
+					mitm.on('request', function (req, res) {
+						expect(req.method).to.be('PUT')
+						expect(req.url).to.be('/domains/example.com/zone')
+						expect(req.headers.host).to.be('api.iwantmyname.com')
+						expect(req.headers.accept).to.be('text/plain')
+						expect(req.headers.authorization).to.be('EXAMPLE_TOKEN')
+
+						expect(req.headers['content-type']).to.be('text/plain')
+						req.setEncoding('utf8')
+						req.on('data', function (data) {
+							expect(data).to.be('$ORIGIN example.com.')
+							res.end()
+						})
+					})
+
+					iwmn.domains('example.com').zone.replace('$ORIGIN example.com.', function () {
+						done()
+					})
 				})
 			})
 
