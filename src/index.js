@@ -12,7 +12,7 @@ function IWMN (token) {
 	this.account = Account(this)
 	this.products = Products(this)
 	this.tlds = TLDs(this)
-	this.searchResults = SearchResults(this)
+	this.search = { results: SearchResults(this) }
 }
 
 IWMN.prototype.URL = 'https://api.iwantmyname.com'

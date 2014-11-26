@@ -581,29 +581,30 @@ describe('IWMN Client', function () {
 
 	describe('Search Results', function () {
 		it('has a search results endpoint', function () {
-			expect(iwmn.searchResults).to.be.ok()
+			expect(iwmn.search).to.be.ok()
+			expect(iwmn.search.results).to.be.ok()
 		})
 		it('can list search results', function (done) {
-			expect(iwmn.searchResults.list).to.be.a('function')
+			expect(iwmn.search.results.list).to.be.a('function')
 
 			mitm.on('request', expectRequest('GET', '/search/results'))
-			iwmn.searchResults.list(function () {
+			iwmn.search.results.list(function () {
 				done()
 			})
 		})
 
 		describe('Result', function () {
 			it('has a search result endpoint constructor', function () {
-				expect(iwmn.searchResults).to.be.a('function')
+				expect(iwmn.search.results).to.be.a('function')
 			})
 			it('has a search result endpoint', function () {
-				expect(iwmn.searchResults('example.com')).to.be.ok()
+				expect(iwmn.search.results('example.com')).to.be.ok()
 			})
 			it('can get a search result', function (done) {
-				expect(iwmn.searchResults('example.com').get).to.be.a('function')
+				expect(iwmn.search.results('example.com').get).to.be.a('function')
 
 				mitm.on('request', expectRequest('GET', '/search/results/example.com'))
-				iwmn.searchResults('example.com').get(function () {
+				iwmn.search.results('example.com').get(function () {
 					done()
 				})
 			})
