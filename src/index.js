@@ -53,6 +53,7 @@ Section.prototype.token = function () {
 function list (done) {
 	return request
 		.get(this.url())
+		.set('Authorization', this.token())
 		.set('Accept', 'application/json')
 		.end(function (err, res) {
 			done && done(err, res.body, res)
@@ -61,15 +62,56 @@ function list (done) {
 function get (done) {
 	return request
 		.get(this.url())
+		.set('Authorization', this.token())
 		.set('Accept', 'application/json')
 		.end(function (err, res) {
 			done && done(err, res.body, res)
 		})
 }
-function create () {}
-function update () {}
-function replace () {}
-function del () {}
+function create (data, done) {
+	return request
+		.post(this.url())
+		.set('Authorization', this.token())
+		.set('Accept', 'application/json')
+		.set('Content-Type', 'application/json')
+		.send(data)
+		.end(function (err, res) {
+			done && done(err, res.body, res)
+		})
+}
+function update (data, done) {
+	return request
+		.patch(this.url())
+		.set('Authorization', this.token())
+		.set('Accept', 'application/json')
+		.set('Content-Type', 'application/json')
+		.send(data)
+		.end(function (err, res) {
+			done && done(err, res.body, res)
+		})
+}
+function replace (data, done) {
+	return request
+		.put(this.url())
+		.set('Authorization', this.token())
+		.set('Accept', 'application/json')
+		.set('Content-Type', 'application/json')
+		.send(data)
+		.end(function (err, res) {
+			done && done(err, res.body, res)
+		})
+}
+function del (done) {
+	return request
+		.delete(this.url())
+		.set('Authorization', this.token())
+		.set('Accept', 'application/json')
+		.set('Content-Type', 'application/json')
+		.send(data)
+		.end(function (err, res) {
+			done && done(err, res.body, res)
+		})
+}
 
 
 function Nameservers (parent) {
