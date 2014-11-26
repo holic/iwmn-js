@@ -180,40 +180,48 @@ describe('IWMN Client', function () {
 			})
 
 			describe('DNS Records', function () {
-				var records = iwmn.domains('example.com').records
-
 				it('has a records endpoint', function () {
-					expect(records).to.be.ok()
-					expect(records.path).to.be.a('function')
-					expect(records.path()).to.be('/domains/example.com/records')
-					expect(records.url).to.be.a('function')
-					expect(records.url()).to.be('https://api.iwantmyname.com/domains/example.com/records')
+					expect(iwmn.domains('example.com').records).to.be.ok()
 				})
-				it('can list records', function () {
-					expect(records.list).to.be.a('function')
+				it('can list records', function (done) {
+					expect(iwmn.domains('example.com').records.list).to.be.a('function')
+
+					mitm.on('request', expectRequest('GET', '/domains/example.com/records'))
+					iwmn.domains('example.com').records.list(function () {
+						done()
+					})
 				})
-				it('can create records', function () {
-					expect(records.create).to.be.a('function')
+				it('can create records', function (done) {
+					expect(iwmn.domains('example.com').records.create).to.be.a('function')
+
+					mitm.on('request', expectRequest('POST', '/domains/example.com/records', '{"type":"A"}'))
+					iwmn.domains('example.com').records.create({ "type": "A" }, function () {
+						done()
+					})
 				})
-				it('can replace records', function () {
-					expect(records.replace).to.be.a('function')
-				})
-				it('is a record endpoint constructor', function () {
-					expect(records).to.be.a('function')
+				it('can replace records', function (done) {
+					expect(iwmn.domains('example.com').records.replace).to.be.a('function')
+
+					mitm.on('request', expectRequest('PUT', '/domains/example.com/records', '[{"type":"A"}]'))
+					iwmn.domains('example.com').records.replace([{ "type": "A" }], function () {
+						done()
+					})
 				})
 
 				describe('DNS Record', function () {
-					var record = records(1)
-
-					it('can create a record endpoint', function () {
-						expect(record).to.be.ok()
-						expect(record.path).to.be.a('function')
-						expect(record.path()).to.be('/domains/example.com/records/1')
-						expect(record.url).to.be.a('function')
-						expect(record.url()).to.be('https://api.iwantmyname.com/domains/example.com/records/1')
+					it('has a record endpoint constructor', function () {
+						expect(iwmn.domains('example.com').records).to.be.a('function')
 					})
-					it('can delete a record', function () {
-						expect(record.del).to.be.a('function')
+					it('can create a record endpoint', function () {
+						expect(iwmn.domains('example.com').records(1)).to.be.ok()
+					})
+					it('can delete a record', function (done) {
+						expect(iwmn.domains('example.com').records(1).del).to.be.a('function')
+
+						mitm.on('request', expectRequest('DELETE', '/domains/example.com/records/1'))
+						iwmn.domains('example.com').records(1).del(function () {
+							done()
+						})
 					})
 				})
 			})
