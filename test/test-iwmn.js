@@ -312,34 +312,32 @@ describe('IWMN Client', function () {
 	})
 
 	describe('Domain Transfers', function () {
-		var transfers = iwmn.transfers
-
 		it('has a transfers endpoint', function () {
-			expect(transfers).to.be.ok()
-			expect(transfers.path).to.be.a('function')
-			expect(transfers.path()).to.be('/transfers')
-			expect(transfers.url).to.be.a('function')
-			expect(transfers.url()).to.be('https://api.iwantmyname.com/transfers')
+			expect(iwmn.transfers).to.be.ok()
 		})
-		it('can list transfers', function () {
-			expect(transfers.list).to.be.a('function')
-		})
-		it('is a transfer endpoint constructor', function () {
-			expect(transfers).to.be.a('function')
+		it('can list transfers', function (done) {
+			expect(iwmn.transfers.list).to.be.a('function')
+
+			mitm.on('request', expectRequest('GET', '/transfers'))
+			iwmn.transfers.list(function () {
+				done()
+			})
 		})
 
 		describe('Transfer', function () {
-			var transfer = transfers('example.com')
-
-			it('has a transfer endpoint', function () {
-				expect(transfer).to.be.ok()
-				expect(transfer.path).to.be.a('function')
-				expect(transfer.path()).to.be('/transfers/example.com')
-				expect(transfer.url).to.be.a('function')
-				expect(transfer.url()).to.be('https://api.iwantmyname.com/transfers/example.com')
+			it('has a transfer endpoint constructor', function () {
+				expect(iwmn.transfers).to.be.a('function')
 			})
-			it('can replace a transfer', function () {
-				expect(transfer.replace).to.be.a('function')
+			it('has a transfer endpoint', function () {
+				expect(iwmn.transfers('example.com')).to.be.ok()
+			})
+			it('can replace a transfer', function (done) {
+				expect(iwmn.transfers('example.com').replace).to.be.a('function')
+
+				mitm.on('request', expectRequest('PUT', '/transfers/example.com', '{"transfer_code":"EXAMPLE"}'))
+				iwmn.transfers('example.com').replace({ transfer_code: "EXAMPLE" }, function () {
+					done()
+				})
 			})
 		})
 	})
