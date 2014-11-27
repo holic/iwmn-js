@@ -1,4 +1,4 @@
-# iwmn.js
+# iwmn.js [![Build Status](https://travis-ci.org/iwantmyname/iwmn-js.svg?branch=master)](https://travis-ci.org/iwantmyname/iwmn-js)
 
 Official Javascript client for the [iwantmyname API](http://dev.iwantmyname.com/docs/)
 
