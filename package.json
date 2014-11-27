@@ -8,7 +8,7 @@
     "url": "https://github.com/iwantmyname/iwmn-js.git"
   },
   "scripts": {
-    "test": "mocha --watch test/**/*",
+    "test": "mocha test/**/*",
     "build": "gulp"
   },
   "dependencies": {
