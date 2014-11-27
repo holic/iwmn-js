@@ -7,20 +7,38 @@ Official Javascript client for the [iwantmyname API](http://dev.iwantmyname.com/
 
 ## Usage
 
+#### Browser
+
 Once released, the library will be available for download in `dist/`.
 
+```html
+<script src="iwmn.js"></script>
+<script>
+  var iwmn = new IWMN('your API token here')
+</script>
+```
+
+#### Node.js
+
+```
+npm install iwmn
+```
+
 ```js
-var iwmn = new IWMN(token)
+var iwmn = require('iwmn')(process.env.IWMN_TOKEN)
+```
 
+#### Calling the API
+
+Callbacks take the form of:
+
+```js
 function callback (err, data) {
-  if (err) {
-    console.error(err)
-    return
-  }
-
-  console.log(data)
+  // ...
 }
+```
 
+```js
 iwmn.domains.list(callback)
 iwmn.domains(domain).get(callback)
 iwmn.domains(domain).update(data, callback)
