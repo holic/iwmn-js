@@ -3,5 +3,7 @@
 node_modules/
 npm-debug.log
 
+coverage/
+
 # ignore dist files until we're ready to release
 dist/

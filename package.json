@@ -8,7 +8,9 @@
     "url": "https://github.com/iwantmyname/iwmn-js.git"
   },
   "scripts": {
-    "test": "mocha test/**/*",
+    "test": "mocha",
+    "test-cov": "istanbul cover _mocha",
+    "test-travis": "istanbul cover _mocha --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "build": "gulp"
   },
   "dependencies": {
@@ -17,10 +19,12 @@
   },
   "devDependencies": {
     "browserify": "^6.3.3",
+    "coveralls": "^2.11.2",
     "expect.js": "^0.3.1",
     "gulp": "^3.8.10",
     "gulp-rename": "^1.2.0",
     "gulp-uglify": "^1.0.1",
+    "istanbul": "^0.3.2",
     "mitm": "^1.0.2",
     "mocha": "^2.0.1",
     "vinyl-source-stream": "^1.0.0"
