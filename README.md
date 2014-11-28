@@ -1,4 +1,4 @@
-# iwmn.js [![Build Status](https://travis-ci.org/iwantmyname/iwmn-js.svg?branch=master)](https://travis-ci.org/iwantmyname/iwmn-js) [![Coverage Status](https://img.shields.io/coveralls/iwantmyname/iwmn-js.svg)](https://coveralls.io/r/iwantmyname/iwmn-js)
+# iwmn.js [![Build status][travis-image]][travis-url] [![Test coverage][coveralls-image]][coveralls-url]
 
 Official Javascript client for the [iwantmyname API](http://dev.iwantmyname.com/docs/)
 
@@ -100,3 +100,9 @@ iwmn.tlds(tld).get(callback)
 iwmn.search.results.list(callback)
 iwmn.search.results(domain).get(callback)
 ```
+
+
+[travis-image]: https://img.shields.io/travis/iwantmyname/iwmn-js.svg?style=flat
+[travis-url]: https://travis-ci.org/iwantmyname/iwmn-js
+[coveralls-image]: https://img.shields.io/coveralls/iwantmyname/iwmn-js.svg?style=flat
+[coveralls-url]: https://coveralls.io/r/iwantmyname/iwmn-js
