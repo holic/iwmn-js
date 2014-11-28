@@ -17,43 +17,30 @@ function IWMN (token) {
 
 IWMN.prototype.URL = 'https://api.iwantmyname.com'
 
-IWMN.prototype.path = function () {
-  return ''
-}
-IWMN.prototype.url = function () {
-  return this.URL
-}
-IWMN.prototype.token = function () {
-  return this.TOKEN
-}
 
 function Section (parent, path, init) {
   this.PARENT = parent
   this.PATH = path
 
-  // Define these here because `Section.call` doesn't inherit the prototype
-  this.path = this.path || Section.prototype.path
-  this.url = this.url || Section.prototype.url
-  this.token = this.token || Section.prototype.token
-
   init && init.call(this)
 }
 
-Section.prototype.path = function () {
-  return this.PARENT.path() + this.PATH
+function url () {
+  return this.PARENT
+    ? url.call(this.PARENT) + this.PATH
+    : this.URL
 }
-Section.prototype.url = function () {
-  return this.PARENT.url() + this.PATH
-}
-Section.prototype.token = function () {
-  return this.PARENT.token()
+function token () {
+  return this.PARENT
+    ? token.call(this.PARENT)
+    : this.TOKEN
 }
 
 
 function getJSON (done) {
   return request
-    .get(this.url())
-    .set('Authorization', this.token())
+    .get(url.call(this))
+    .set('Authorization', token.call(this))
     .set('Accept', 'application/json')
     .end(function (err, res) {
       done && done(err, res.body, res)
@@ -61,8 +48,8 @@ function getJSON (done) {
 }
 function postJSON (data, done) {
   return request
-    .post(this.url())
-    .set('Authorization', this.token())
+    .post(url.call(this))
+    .set('Authorization', token.call(this))
     .set('Accept', 'application/json')
     .set('Content-Type', 'application/json')
     .send(data)
@@ -72,8 +59,8 @@ function postJSON (data, done) {
 }
 function patchJSON (data, done) {
   return request
-    .patch(this.url())
-    .set('Authorization', this.token())
+    .patch(url.call(this))
+    .set('Authorization', token.call(this))
     .set('Accept', 'application/json')
     .set('Content-Type', 'application/json')
     .send(data)
@@ -83,8 +70,8 @@ function patchJSON (data, done) {
 }
 function putJSON (data, done) {
   return request
-    .put(this.url())
-    .set('Authorization', this.token())
+    .put(url.call(this))
+    .set('Authorization', token.call(this))
     .set('Accept', 'application/json')
     .set('Content-Type', 'application/json')
     .send(data)
@@ -94,8 +81,8 @@ function putJSON (data, done) {
 }
 function deleteJSON (done) {
   return request
-    .del(this.url())
-    .set('Authorization', this.token())
+    .del(url.call(this))
+    .set('Authorization', token.call(this))
     .set('Accept', 'application/json')
     .end(function (err, res) {
       done && done(err, res.body, res)
@@ -105,8 +92,8 @@ function deleteJSON (done) {
 
 function getText (done) {
   return request
-    .get(this.url())
-    .set('Authorization', this.token())
+    .get(url.call(this))
+    .set('Authorization', token.call(this))
     .set('Accept', 'text/plain')
     .end(function (err, res) {
       done && done(err, res.body, res)
@@ -114,8 +101,8 @@ function getText (done) {
 }
 function putText (data, done) {
   return request
-    .put(this.url())
-    .set('Authorization', this.token())
+    .put(url.call(this))
+    .set('Authorization', token.call(this))
     .set('Accept', 'text/plain')
     .set('Content-Type', 'text/plain')
     .send(data)
