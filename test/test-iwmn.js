@@ -589,8 +589,8 @@ describe('IWMN Client', function () {
     it('can list search results', function (done) {
       expect(iwmn.search.results.list).to.be.a('function')
 
-      mitm.on('request', expectRequest('GET', '/search/results'))
-      iwmn.search.results.list(function () {
+      mitm.on('request', expectRequest('GET', '/search/results?q=Acme%20Inc.'))
+      iwmn.search.results.list({ q: 'Acme Inc.' }, function () {
         done()
       })
     })

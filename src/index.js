@@ -37,9 +37,14 @@ function token () {
 }
 
 
-function getJSON (done) {
+function getJSON (query, done) {
+  if (typeof query === 'function') {
+    done = query
+    query = null
+  }
   return request
     .get(url.call(this))
+    .query(query)
     .set('Authorization', token.call(this))
     .set('Accept', 'application/json')
     .end(function (err, res) {
@@ -90,9 +95,14 @@ function deleteJSON (done) {
 }
 
 
-function getText (done) {
+function getText (query, done) {
+  if (typeof query === 'function') {
+    done = query
+    query = null
+  }
   return request
     .get(url.call(this))
+    .query(query)
     .set('Authorization', token.call(this))
     .set('Accept', 'text/plain')
     .end(function (err, res) {
