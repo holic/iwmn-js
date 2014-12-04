@@ -273,7 +273,7 @@ describe('IWMN Client', function () {
       })
 
       describe('Services', function () {
-        it('has an services endpoint', function () {
+        it('has a services endpoint', function () {
           expect(iwmn.domains('example.com').services).to.be.ok()
         })
         it('can list services', function (done) {
@@ -294,13 +294,13 @@ describe('IWMN Client', function () {
         })
 
         describe('Service', function () {
-          it('has an service endpoint constructor', function () {
+          it('has a service endpoint constructor', function () {
             expect(iwmn.domains('example.com').services).to.be.a('function')
           })
-          it('can create an service endpoint', function () {
+          it('can create a service endpoint', function () {
             expect(iwmn.domains('example.com').services(1)).to.be.ok()
           })
-          it('can delete an service', function (done) {
+          it('can delete a service', function (done) {
             expect(iwmn.domains('example.com').services(1).del).to.be.a('function')
 
             mitm.on('request', expectRequest('DELETE', '/domains/example.com/services/1'))
@@ -345,7 +345,7 @@ describe('IWMN Client', function () {
   })
 
   describe('One-click Services', function () {
-    it('has an services endpoint', function () {
+    it('has a services endpoint', function () {
       expect(iwmn.services).to.be.ok()
     })
     it('can list services', function (done) {
@@ -358,13 +358,13 @@ describe('IWMN Client', function () {
     })
 
     describe('Service', function () {
-      it('has an service endpoint constructor', function () {
+      it('has a service endpoint constructor', function () {
         expect(iwmn.services).to.be.a('function')
       })
-      it('has an service endpoint', function () {
+      it('has a service endpoint', function () {
         expect(iwmn.services('tumblr')).to.be.ok()
       })
-      it('can get an service', function (done) {
+      it('can get a service', function (done) {
         expect(iwmn.services('tumblr').get).to.be.a('function')
 
         mitm.on('request', expectRequest('GET', '/services/tumblr'))
