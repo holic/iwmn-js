@@ -448,7 +448,7 @@ describe('IWMN Client', function () {
       })
     })
 
-    describe('Billing Profiles', function () {
+    describe('Default Billing Profile', function () {
       it('has a default billing profile endpoint', function () {
         expect(iwmn.account.default_billing).to.be.ok()
       })
