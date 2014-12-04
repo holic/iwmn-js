@@ -449,40 +449,31 @@ describe('IWMN Client', function () {
     })
 
     describe('Billing Profiles', function () {
-      it('has a billing profiles endpoint', function () {
-        expect(iwmn.account.billing).to.be.ok()
+      it('has a default billing profile endpoint', function () {
+        expect(iwmn.account.default_billing).to.be.ok()
       })
-      it('can list billing profiles', function (done) {
-        expect(iwmn.account.billing.list).to.be.a('function')
+      it('can get the default billing profile', function (done) {
+        expect(iwmn.account.default_billing.get).to.be.a('function')
 
-        mitm.on('request', expectRequest('GET', '/account/billing'))
-        iwmn.account.billing.list(function () {
+        mitm.on('request', expectRequest('GET', '/account/billing/default'))
+        iwmn.account.default_billing.get(function () {
           done()
         })
       })
-      it('can create billing profiles', function (done) {
-        expect(iwmn.account.billing.create).to.be.a('function')
+      it('can create replace the default profile', function (done) {
+        expect(iwmn.account.default_billing.replace).to.be.a('function')
 
-        mitm.on('request', expectRequest('POST', '/account/billing', '{"number":"4444111144441111"}'))
-        iwmn.account.billing.create({ number: "4444111144441111" }, function () {
+        mitm.on('request', expectRequest('PUT', '/account/billing/default', '{"number":"4444111144441111"}'))
+        iwmn.account.default_billing.replace({ number: "4444111144441111" }, function () {
           done()
         })
       })
+      it('can delete the default billing profile', function (done) {
+        expect(iwmn.account.default_billing.del).to.be.a('function')
 
-      describe('Profile', function () {
-        it('has a billing profile endpoint constructor', function () {
-          expect(iwmn.account.billing).to.be.a('function')
-        })
-        it('has a billing profile endpoint', function () {
-          expect(iwmn.account.billing(1)).to.be.ok()
-        })
-        it('can delete a billing profile', function (done) {
-          expect(iwmn.account.billing(1).del).to.be.a('function')
-
-          mitm.on('request', expectRequest('DELETE', '/account/billing/1'))
-          iwmn.account.billing(1).del(function () {
-            done()
-          })
+        mitm.on('request', expectRequest('DELETE', '/account/billing/default'))
+        iwmn.account.default_billing.del(function () {
+          done()
         })
       })
     })
