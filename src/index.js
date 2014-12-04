@@ -8,7 +8,7 @@ function IWMN (token) {
 
   this.domains = Domains(this)
   this.transfers = Transfers(this)
-  this.apps = Apps(this)
+  this.services = Services(this)
   this.account = Account(this)
   this.products = Products(this)
   this.tlds = TLDs(this)
@@ -165,7 +165,7 @@ function Domains (parent) {
       this.contacts = Contacts(this)
       this.records = Records(this)
       this.zone = Zone(this)
-      this.apps = DomainApps(this)
+      this.services = DomainServices(this)
     })
   }
   Section.call(Domain, parent, '/domains', function () {
@@ -207,29 +207,29 @@ function Zone (parent) {
   })
 }
 
-function Apps (parent) {
-  function App (app) {
-    return new Section(App, '/' + encodeURIComponent(app), function () {
+function Services (parent) {
+  function Service (service) {
+    return new Section(Service, '/' + encodeURIComponent(service), function () {
       this.get = getJSON
     })
   }
-  Section.call(App, parent, '/apps', function () {
+  Section.call(Service, parent, '/services', function () {
     this.list = getJSON
   })
-  return App
+  return Service
 }
 
-function DomainApps (parent) {
-  function DomainApp (id) {
-    return new Section(DomainApp, '/' + encodeURIComponent(id), function () {
+function DomainServices (parent) {
+  function DomainService (id) {
+    return new Section(DomainService, '/' + encodeURIComponent(id), function () {
       this.del = deleteJSON
     })
   }
-  Section.call(DomainApp, parent, '/apps', function () {
+  Section.call(DomainService, parent, '/services', function () {
     this.list = getJSON
     this.create = postJSON
   })
-  return DomainApp
+  return DomainService
 }
 
 function Account (parent) {
@@ -238,37 +238,32 @@ function Account (parent) {
     this.update = patchJSON
     this.default_nameservers = DefaultNameservers(this)
     this.default_contact = DefaultContact(this)
-    this.billing = BillingProfiles(this)
+    this.default_billing = DefaultBilling(this)
     this.receipts = Receipts(this)
   })
 }
 
 function DefaultNameservers (parent) {
-  return new Section(parent, '/default_nameservers', function () {
+  return new Section(parent, '/nameservers/default', function () {
     this.list = getJSON
     this.replace = putJSON
   })
 }
 
 function DefaultContact (parent) {
-  return new Section(parent, '/default_contact', function () {
+  return new Section(parent, '/contacts/default', function () {
     this.get = getJSON
     this.update = patchJSON
     this.replace = putJSON
   })
 }
 
-function BillingProfiles (parent) {
-  function BillingProfile (id) {
-    return new Section(BillingProfile, '/' + encodeURIComponent(id), function () {
-      this.del = deleteJSON
-    })
-  }
-  Section.call(BillingProfile, parent, '/billing', function () {
-    this.list = getJSON
-    this.create = postJSON
+function DefaultBilling (parent) {
+  return new Section(parent, '/billing/default', function () {
+    this.get = getJSON
+    this.replace = putJSON
+    this.del = deleteJSON
   })
-  return BillingProfile
 }
 
 function Receipts (parent) {
