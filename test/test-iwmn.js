@@ -403,7 +403,7 @@ describe('IWMN Client', function () {
       it('can get default contact details', function (done) {
         expect(iwmn.account.default_contact.get).to.be.a('function')
 
-        mitm.on('request', expectRequest('GET', '/account/default_contact'))
+        mitm.on('request', expectRequest('GET', '/account/contacts/default'))
         iwmn.account.default_contact.get(function () {
           done()
         })
@@ -411,7 +411,7 @@ describe('IWMN Client', function () {
       it('can update default contact details', function (done) {
         expect(iwmn.account.default_contact.update).to.be.a('function')
 
-        mitm.on('request', expectRequest('PATCH', '/account/default_contact', '{"first_name":"John"}'))
+        mitm.on('request', expectRequest('PATCH', '/account/contacts/default', '{"first_name":"John"}'))
         iwmn.account.default_contact.update({ first_name: 'John' }, function () {
           done()
         })
@@ -419,7 +419,7 @@ describe('IWMN Client', function () {
       it('can replace default contact details', function (done) {
         expect(iwmn.account.default_contact.replace).to.be.a('function')
 
-        mitm.on('request', expectRequest('PUT', '/account/default_contact', '{"first_name":"John"}'))
+        mitm.on('request', expectRequest('PUT', '/account/contacts/default', '{"first_name":"John"}'))
         iwmn.account.default_contact.replace({ first_name: 'John' }, function () {
           done()
         })
@@ -433,7 +433,7 @@ describe('IWMN Client', function () {
       it('can list default nameservers', function (done) {
         expect(iwmn.account.default_nameservers.list).to.be.a('function')
 
-        mitm.on('request', expectRequest('GET', '/account/default_nameservers'))
+        mitm.on('request', expectRequest('GET', '/account/nameservers/default'))
         iwmn.account.default_nameservers.list(function () {
           done()
         })
@@ -441,7 +441,7 @@ describe('IWMN Client', function () {
       it('can replace default nameservers', function (done) {
         expect(iwmn.account.default_nameservers.replace).to.be.a('function')
 
-        mitm.on('request', expectRequest('PUT', '/account/default_nameservers', '["ns1.dnsimple.com","ns2.dnsimple.com"]'))
+        mitm.on('request', expectRequest('PUT', '/account/nameservers/default', '["ns1.dnsimple.com","ns2.dnsimple.com"]'))
         iwmn.account.default_nameservers.replace(['ns1.dnsimple.com', 'ns2.dnsimple.com'], function () {
           done()
         })
