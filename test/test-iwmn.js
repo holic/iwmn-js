@@ -272,39 +272,39 @@ describe('IWMN Client', function () {
         })
       })
 
-      describe('Apps', function () {
-        it('has an apps endpoint', function () {
-          expect(iwmn.domains('example.com').apps).to.be.ok()
+      describe('Services', function () {
+        it('has an services endpoint', function () {
+          expect(iwmn.domains('example.com').services).to.be.ok()
         })
-        it('can list apps', function (done) {
-          expect(iwmn.domains('example.com').apps.list).to.be.a('function')
+        it('can list services', function (done) {
+          expect(iwmn.domains('example.com').services.list).to.be.a('function')
 
-          mitm.on('request', expectRequest('GET', '/domains/example.com/apps'))
-          iwmn.domains('example.com').apps.list(function () {
+          mitm.on('request', expectRequest('GET', '/domains/example.com/services'))
+          iwmn.domains('example.com').services.list(function () {
             done()
           })
         })
-        it('can create apps', function (done) {
-          expect(iwmn.domains('example.com').apps.create).to.be.a('function')
+        it('can create services', function (done) {
+          expect(iwmn.domains('example.com').services.create).to.be.a('function')
 
-          mitm.on('request', expectRequest('POST', '/domains/example.com/apps', '{"app":"Tumblr"}'))
-          iwmn.domains('example.com').apps.create({ app: 'Tumblr' }, function () {
+          mitm.on('request', expectRequest('POST', '/domains/example.com/services', '{"service":"Tumblr"}'))
+          iwmn.domains('example.com').services.create({ service: 'Tumblr' }, function () {
             done()
           })
         })
 
-        describe('App', function () {
-          it('has an app endpoint constructor', function () {
-            expect(iwmn.domains('example.com').apps).to.be.a('function')
+        describe('Service', function () {
+          it('has an service endpoint constructor', function () {
+            expect(iwmn.domains('example.com').services).to.be.a('function')
           })
-          it('can create an app endpoint', function () {
-            expect(iwmn.domains('example.com').apps(1)).to.be.ok()
+          it('can create an service endpoint', function () {
+            expect(iwmn.domains('example.com').services(1)).to.be.ok()
           })
-          it('can delete an app', function (done) {
-            expect(iwmn.domains('example.com').apps(1).del).to.be.a('function')
+          it('can delete an service', function (done) {
+            expect(iwmn.domains('example.com').services(1).del).to.be.a('function')
 
-            mitm.on('request', expectRequest('DELETE', '/domains/example.com/apps/1'))
-            iwmn.domains('example.com').apps(1).del(function () {
+            mitm.on('request', expectRequest('DELETE', '/domains/example.com/services/1'))
+            iwmn.domains('example.com').services(1).del(function () {
               done()
             })
           })
@@ -344,31 +344,31 @@ describe('IWMN Client', function () {
     })
   })
 
-  describe('Apps & Services', function () {
-    it('has an apps endpoint', function () {
-      expect(iwmn.apps).to.be.ok()
+  describe('One-click Services', function () {
+    it('has an services endpoint', function () {
+      expect(iwmn.services).to.be.ok()
     })
-    it('can list apps', function (done) {
-      expect(iwmn.apps.list).to.be.a('function')
+    it('can list services', function (done) {
+      expect(iwmn.services.list).to.be.a('function')
 
-      mitm.on('request', expectRequest('GET', '/apps'))
-      iwmn.apps.list(function () {
+      mitm.on('request', expectRequest('GET', '/services'))
+      iwmn.services.list(function () {
         done()
       })
     })
 
-    describe('App', function () {
-      it('has an app endpoint constructor', function () {
-        expect(iwmn.apps).to.be.a('function')
+    describe('Service', function () {
+      it('has an service endpoint constructor', function () {
+        expect(iwmn.services).to.be.a('function')
       })
-      it('has an app endpoint', function () {
-        expect(iwmn.apps('tumblr')).to.be.ok()
+      it('has an service endpoint', function () {
+        expect(iwmn.services('tumblr')).to.be.ok()
       })
-      it('can get an app', function (done) {
-        expect(iwmn.apps('tumblr').get).to.be.a('function')
+      it('can get an service', function (done) {
+        expect(iwmn.services('tumblr').get).to.be.a('function')
 
-        mitm.on('request', expectRequest('GET', '/apps/tumblr'))
-        iwmn.apps('tumblr').get(function () {
+        mitm.on('request', expectRequest('GET', '/services/tumblr'))
+        iwmn.services('tumblr').get(function () {
           done()
         })
       })
